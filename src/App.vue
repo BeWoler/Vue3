@@ -1,40 +1,19 @@
 <template>
-  <form class="bg-slate-400 p-3 mb-4" @submit.prevent>
-    <input
-      type="text"
-      placeholder="Title"
-      class="border-2 border-black mr-4 px-1"
-      v-bind:value="title"
-      @input="inputTitle"
-    />
-    <input
-      type="text"
-      placeholder="Description"
-      class="border-2 border-black mr-4 px-1"
-      v-bind:value="body"
-      @input="inputBody"
-    />
-    <button class="border-black border-2 bg-slate-100 p-1" @click="createPost">
-      Create
-    </button>
-  </form>
-  <div class="flex flex-wrap gap-5 p-3">
-    <div
-      class="border-2 border-black p-3 max-w-fit"
-      v-for="post in posts"
-      :key="post.id"
-    >
-      <div><strong class="mr-1">Title:</strong>{{ post.title }}</div>
-      <div><strong class="mr-1">Body:</strong>{{ post.body }}</div>
-    </div>
-  </div>
+  <PostForm />
+  <PostList :posts="posts" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import "./index.css";
+import PostForm from "./components/PostForm.vue";
+import PostList from "./components/PostList.vue";
 
 export default defineComponent({
+  components: {
+    PostForm,
+    PostList,
+  },
   data() {
     return {
       posts: [
