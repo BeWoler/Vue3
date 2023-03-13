@@ -1,12 +1,13 @@
 <template>
-  <div class="flex flex-wrap gap-5 p-3">
-    <div
-      class="border-2 border-black p-3 max-w-fit"
-      v-for="post in posts"
-      :key="post.id"
-    >
-      <div><strong class="mr-1">Title:</strong>{{ post.title }}</div>
-      <div><strong class="mr-1">Body:</strong>{{ post.body }}</div>
+  <div class="flex-col flex-wrap">
+    <h3 class="px-3">Posts:</h3>
+    <div class="flex flex-wrap gap-5 p-3">
+      <PostItem
+        class="border-2 border-black p-3 max-w-fit"
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+      />
     </div>
   </div>
 </template>
@@ -15,6 +16,7 @@
 import { defineProps } from "vue";
 import { type PropType } from "vue";
 import IPost from "./interfaces/post.interface";
+import PostItem from "./PostItem.vue";
 
 defineProps({
   posts: {
