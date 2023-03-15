@@ -1,17 +1,7 @@
 <template>
   <form class="bg-slate-400 p-3 mb-4" @submit.prevent>
-    <input
-      type="text"
-      placeholder="Title"
-      class="border-2 border-black mr-4 px-1"
-      v-model="post.title"
-    />
-    <input
-      type="text"
-      placeholder="Description"
-      class="border-2 border-black mr-4 px-1"
-      v-model="post.body"
-    />
+    <MyInput type="text" placeholder="Title" v-model="post.title" />
+    <MyInput type="text" placeholder="Description" v-model="post.body" />
     <MyButton @click="createPost">Create</MyButton>
   </form>
 </template>
