@@ -12,9 +12,7 @@
       class="border-2 border-black mr-4 px-1"
       v-model="post.body"
     />
-    <button class="border-black border-2 bg-slate-100 p-1" @click="createPost">
-      Create
-    </button>
+    <MyButton @click="createPost">Create</MyButton>
   </form>
 </template>
 
@@ -33,6 +31,7 @@ export default defineComponent({
   },
   methods: {
     createPost() {
+      if (!this.post.body && !this.post.title) return alert("Fields is empty");
       this.post.id = Date.now();
       this.$emit("create", this.post);
       this.post = {
