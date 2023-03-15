@@ -1,6 +1,6 @@
 <template>
   <input
-    class="border-2 border-black mr-4 px-1"
+    class="border-2 border-black px-1 w-full h-10"
     :value="modelValue"
     @input="updateInput"
   />

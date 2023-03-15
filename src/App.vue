@@ -1,6 +1,11 @@
 <template>
-  <PostForm @create="createPost" />
-  <PostList :posts="posts" @remove="removePost" />
+  <div class="flex flex-col justify-center items-center pt-10">
+    <MyButton @click="showDialog">Create Post</MyButton>
+    <MyDialog v-model:show="dialogVisible"
+      ><PostForm @create="createPost"
+    /></MyDialog>
+    <PostList :posts="posts" @remove="removePost" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -22,14 +27,19 @@ export default defineComponent({
         { id: 2, title: "12345", body: "Descr2" },
         { id: 3, title: "123666", body: "Descr3" },
       ],
+      dialogVisible: false,
     };
   },
   methods: {
     createPost(post: IPost) {
       this.posts.push(post);
+      this.dialogVisible = false;
     },
     removePost(post: IPost) {
       this.posts = this.posts.filter((item: IPost) => item.id !== post.id);
+    },
+    showDialog() {
+      this.dialogVisible = true;
     },
   },
 });

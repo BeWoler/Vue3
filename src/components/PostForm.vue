@@ -1,5 +1,8 @@
 <template>
-  <form class="bg-slate-400 p-3 mb-4" @submit.prevent>
+  <form
+    class="flex flex-col gap-5 justify-center items-center p-3"
+    @submit.prevent
+  >
     <MyInput type="text" placeholder="Title" v-model="post.title" />
     <MyInput type="text" placeholder="Description" v-model="post.body" />
     <MyButton @click="createPost">Create</MyButton>
