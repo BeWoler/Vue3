@@ -1,6 +1,6 @@
 <template>
   <PostForm @create="createPost" />
-  <PostList :posts="posts" />
+  <PostList :posts="posts" @remove="removePost" />
 </template>
 
 <script lang="ts">
@@ -27,6 +27,9 @@ export default defineComponent({
   methods: {
     createPost(post: IPost) {
       this.posts.push(post);
+    },
+    removePost(post: IPost) {
+      this.posts = this.posts.filter((item: IPost) => item.id !== post.id);
     },
   },
 });
