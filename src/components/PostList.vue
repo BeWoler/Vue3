@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex-wrap">
+  <div class="flex-col flex-wrap" v-if="posts.length > 0">
     <h3 class="px-3">Posts:</h3>
     <div class="flex flex-wrap gap-5 p-3">
       <PostItem
@@ -10,6 +10,9 @@
         @remove="$emit('remove', post)"
       />
     </div>
+  </div>
+  <div v-else class="flex-col flex-wrap">
+    <h3 class="px-3">Posts is missing</h3>
   </div>
 </template>
 
