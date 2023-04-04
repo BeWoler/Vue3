@@ -1,12 +1,18 @@
 <template>
   <div class="flex flex-col justify-center items-center pt-10 gap-2">
     <h1 class="font-bold text-lg">\\ Posts //</h1>
-    <MyButton @click="fetchPosts">Get posts</MyButton>
-    <MyButton @click="showDialog">Create Post</MyButton>
+    <div class="flex flex-row gap-3">
+      <MyButton @click="fetchPosts">Get posts</MyButton>
+      <MyButton @click="showDialog">Create Post</MyButton>
+    </div>
+    <div class="flex flex-row justify-center items-center gap-2">
+      <h2>Filters:</h2>
+      <MySelect v-model="selectedSort" :options="sortOptions" />
+    </div>
     <MyDialog v-model:show="dialogVisible"
       ><PostForm @create="createPost"
     /></MyDialog>
-    <PostList :posts="posts" @remove="removePost" />
+    <PostList :posts="sortedPosts" @remove="removePost" />
   </div>
 </template>
 
@@ -27,6 +33,11 @@ export default defineComponent({
     return {
       posts: [] as IPost[],
       dialogVisible: false,
+      selectedSort: "" as string,
+      sortOptions: [
+        { value: "title", name: "Name", id: 1 },
+        { value: "describe", name: "Describe", id: 2 },
+      ],
     };
   },
   methods: {
@@ -53,6 +64,15 @@ export default defineComponent({
   },
   mounted() {
     this.fetchPosts();
+  },
+  computed: {
+    sortedPosts(): IPost[] {
+      return [...(this.posts as Array<IPost>)].sort((a: IPost, b: IPost) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return a[this.selectedSort]?.localeCompare(b[this.selectedSort]);
+      });
+    },
   },
 });
 </script>
