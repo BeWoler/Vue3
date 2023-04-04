@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col justify-center items-center pt-10">
+  <div class="flex flex-col justify-center items-center pt-10 gap-2">
+    <h1 class="font-bold text-lg">\\ Posts //</h1>
+    <MyButton @click="fetchPosts">Get posts</MyButton>
     <MyButton @click="showDialog">Create Post</MyButton>
     <MyDialog v-model:show="dialogVisible"
       ><PostForm @create="createPost"
@@ -10,6 +12,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import axios from "axios";
 import "./index.css";
 import PostForm from "./components/PostForm.vue";
 import PostList from "./components/PostList.vue";
@@ -22,11 +25,7 @@ export default defineComponent({
   },
   data() {
     return {
-      posts: [
-        { id: 1, title: "123", body: "Descr" },
-        { id: 2, title: "12345", body: "Descr2" },
-        { id: 3, title: "123666", body: "Descr3" },
-      ],
+      posts: [] as IPost[],
       dialogVisible: false,
     };
   },
@@ -40,6 +39,16 @@ export default defineComponent({
     },
     showDialog() {
       this.dialogVisible = true;
+    },
+    async fetchPosts() {
+      try {
+        const res = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+        );
+        this.posts = res.data;
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 });
