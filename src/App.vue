@@ -51,6 +51,9 @@ export default defineComponent({
       }
     },
   },
+  mounted() {
+    this.fetchPosts();
+  },
 });
 </script>
 
