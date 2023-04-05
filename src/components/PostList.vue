@@ -1,9 +1,9 @@
 <template>
   <div class="flex-col flex-wrap" v-if="posts.length > 0">
-    <h3 class="px-3">Posts:</h3>
-    <div class="flex flex-wrap gap-5 p-3">
+    <h3>Posts:</h3>
+    <div class="flex flex-row flex-wrap gap-5">
       <PostItem
-        class="border-2 border-black p-3 max-w-fit"
+        class="border-2 border-black max-w-md min-w-300 min-h-100 max-h-200 overflow-auto"
         v-for="post in posts"
         :key="post.id"
         :post="post"
