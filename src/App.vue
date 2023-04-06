@@ -14,17 +14,7 @@
       ><PostForm @create="createPost"
     /></MyDialog>
     <PostList :posts="sortedAndSearchedPosts" @remove="removePost" />
-    <div class="flex gap-4 mt-10">
-      <div
-        v-for="pageNum in totalPages"
-        :key="pageNum"
-        @click="changePage(pageNum)"
-        class="border-2 border-black border-solid py-1 px-2.5 font hover:cursor-pointer"
-        :style="{ color: page === pageNum ? 'red' : 'black' }"
-      >
-        {{ pageNum }}
-      </div>
-    </div>
+    <div class="h-6" ref="observer"></div>
   </div>
 </template>
 
@@ -86,12 +76,43 @@ export default defineComponent({
         console.log(e);
       }
     },
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        const res = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(res.headers["x-total-count"] / this.limit);
+        this.posts = [...this.posts, ...res.data];
+      } catch (e) {
+        console.log(e);
+      }
+    },
     changePage(pageNum: number) {
       this.page = pageNum;
     },
   },
   mounted() {
     this.fetchPosts();
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const callback = (entries: any, observer: any) => {
+      if (entries[0].isIntersecting && this.posts.length < this.totalPages) {
+        this.loadMorePosts();
+      }
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer as any);
   },
   computed: {
     sortedPosts(): IPost[] {
@@ -108,9 +129,9 @@ export default defineComponent({
     },
   },
   watch: {
-    page() {
-      this.fetchPosts();
-    },
+    // page() {
+    //   this.fetchPosts();
+    // },
   },
 });
 </script>
