@@ -14,7 +14,7 @@
       ><PostForm @create="createPost"
     /></MyDialog>
     <PostList :posts="sortedAndSearchedPosts" @remove="removePost" />
-    <div class="h-7" ref="observerDiv"></div>
+    <div class="h-7" v-intersection="loadMorePosts"></div>
   </div>
 </template>
 
@@ -100,19 +100,6 @@ export default defineComponent({
   },
   mounted() {
     this.fetchPosts();
-    const options = {
-      rootMargin: "0px",
-      threshold: 1.0,
-    };
-
-    const callback = (entries: any, observer: any) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts();
-      }
-    };
-
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observerDiv as any);
   },
   computed: {
     sortedPosts(): IPost[] {

@@ -28,8 +28,6 @@ export default {
   },
   methods: {
     changeOption(event: Event) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       this.$emit(
         "update:modelValue",
         (event.target as HTMLSelectElement).value

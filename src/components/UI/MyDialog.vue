@@ -4,7 +4,7 @@
     class="top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 fixed flex"
     @click="hideDialog"
   >
-    <div @click.stop class="m-auto border-8 bg-white h-52 w-96 rounded-lg">
+    <div @click.stop class="m-auto border-2 bg-white h-52 w-96 rounded-lg">
       <slot></slot>
     </div>
   </div>
@@ -21,8 +21,6 @@ export default {
   },
   methods: {
     hideDialog() {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       this.$emit("update:show", false);
     },
   },
