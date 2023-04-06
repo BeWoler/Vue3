@@ -109,8 +109,6 @@ export default defineComponent({
   computed: {
     sortedPosts(): IPost[] {
       return [...(this.posts as Array<IPost>)].sort((a: IPost, b: IPost) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         return a[this.selectedSort]?.localeCompare(b[this.selectedSort]);
       });
     },
