@@ -9,7 +9,12 @@
       <h2>Filters:</h2>
       <MySelect v-model="selectedSort" :options="sortOptions" />
     </div>
-    <MyInput v-model="searchQuery" placeholder="Search..." class="max-w-xs" />
+    <MyInput
+      v-focus
+      v-model="searchQuery"
+      placeholder="Search..."
+      class="max-w-xs"
+    />
     <MyDialog v-model:show="dialogVisible"
       ><PostForm @create="createPost"
     /></MyDialog>
