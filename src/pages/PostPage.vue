@@ -7,11 +7,16 @@
     </div>
     <div class="flex flex-row justify-center items-center gap-2">
       <h2>Filters:</h2>
-      <MySelect v-model="selectedSort" :options="sortOptions" />
+      <MySelect
+        :model-value="selectedSort"
+        @update:model-value="setSelectedSort"
+        :options="sortOptions"
+      />
     </div>
     <MyInput
       v-focus
-      v-model="searchQuery"
+      :model-value="searchQuery"
+      @update:model-value="setSearchQuery"
       placeholder="Search..."
       class="max-w-xs"
     />
@@ -25,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import axios from "axios";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
 import IPost from "@/components/interfaces/post.interface";
@@ -40,20 +45,19 @@ export default defineComponent({
   },
   data() {
     return {
-      posts: [] as IPost[],
       dialogVisible: false,
-      selectedSort: "" as string,
-      searchQuery: "" as string,
-      page: 1 as number,
-      limit: 10 as number,
-      totalPages: 0 as number,
-      sortOptions: [
-        { value: "title", name: "Name", id: 1 },
-        { value: "describe", name: "Describe", id: 2 },
-      ],
     };
   },
   methods: {
+    ...mapMutations({
+      setPage: "post/setPage",
+      setSearchQuery: "post/setSearchQuery",
+      setSelectedSort: "post/setSelectedSort",
+    }),
+    ...mapActions({
+      loadMorePosts: "post/loadMorePosts",
+      fetchPosts: "post/fetchPosts",
+    }),
     createPost(post: IPost) {
       this.posts.push(post);
       this.dialogVisible = false;
@@ -64,41 +68,6 @@ export default defineComponent({
     showDialog() {
       this.dialogVisible = true;
     },
-    async fetchPosts() {
-      try {
-        const res = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              _page: this.page,
-              _limit: this.limit,
-            },
-          }
-        );
-        this.totalPages = Math.ceil(res.headers["x-total-count"] / this.limit);
-        this.posts = res.data;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async loadMorePosts() {
-      try {
-        this.page += 1;
-        const res = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              _page: this.page,
-              _limit: this.limit,
-            },
-          }
-        );
-        this.totalPages = Math.ceil(res.headers["x-total-count"] / this.limit);
-        this.posts = [...this.posts, ...res.data];
-      } catch (e) {
-        console.log(e);
-      }
-    },
     changePage(pageNum: number) {
       this.page = pageNum;
     },
@@ -107,16 +76,20 @@ export default defineComponent({
     this.fetchPosts();
   },
   computed: {
-    sortedPosts(): IPost[] {
-      return [...(this.posts as Array<IPost>)].sort((a: IPost, b: IPost) => {
-        return a[this.selectedSort]?.localeCompare(b[this.selectedSort]);
-      });
-    },
-    sortedAndSearchedPosts(): IPost[] {
-      return this.sortedPosts.filter((post: IPost) => {
-        return post.title.toLowerCase().includes(this.searchQuery);
-      });
-    },
+    ...mapState({
+      posts: (state) => state.post.posts,
+      selectedSort: (state) => state.post.selectedSort,
+      searchQuery: (state) => state.post.searchQuery,
+      page: (state) => state.post.page,
+      limit: (state) => state.post.limit,
+      totalPages: (state) => state.post.totalPages,
+      sortOptions: (state) => state.post.sortOptions,
+    }),
+    ...mapState({}),
+    ...mapGetters({
+      sortedPosts: "post/sortedPosts",
+      sortedAndSearchedPosts: "post/sortedAndSearchedPosts",
+    }),
   },
 });
 </script>
